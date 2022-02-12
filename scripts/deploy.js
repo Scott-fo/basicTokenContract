@@ -6,6 +6,9 @@
 const hre = require("hardhat");
 
 async function main() {
+  const [deployer] = await hre.ethers.getSigners();
+
+  console.log("Deploying contracts with the account: ", deployer.address);
   // Hardhat always runs the compile task when running scripts with its command
   // line interface.
   //
@@ -16,10 +19,21 @@ async function main() {
   // We get the contract to deploy
   const Greeter = await hre.ethers.getContractFactory("Greeter");
   const greeter = await Greeter.deploy("Hello, Hardhat!");
+  
+  const Token = await hre.ethers.getContractFactory("Token");
+  const token = await Token.deploy();
 
   await greeter.deployed();
+  await token.deployed();
+
+
+  const SFToken = await hre.ethers.getContractFactory("SFToken");
+  const sfToken = await SFToken.deploy("Scott Fo Token", "SFT");
+  await sfToken.deployed();
 
   console.log("Greeter deployed to:", greeter.address);
+  console.log("Token deployed to:", token.address);
+  console.log("SFToken deployed to:", sfToken.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
